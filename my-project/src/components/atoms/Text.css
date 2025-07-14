@@ -1,0 +1,81 @@
+.text {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Variants */
+.text--h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.text--h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.875rem;
+}
+
+.text--h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+
+.text--h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.625rem;
+}
+
+.text--h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.text--h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.text--body {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.text--caption {
+  font-size: 0.875rem;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+}
+
+/* Colors */
+.text--primary {
+  color: #007bff;
+}
+
+.text--secondary {
+  color: #6c757d;
+}
+
+.text--danger {
+  color: #dc3545;
+}
+
+.text--success {
+  color: #28a745;
+}
+
+.text--muted {
+  color: #6c757d;
+  opacity: 0.8;
+}
