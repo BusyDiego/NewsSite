@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { HomePage } from "./components/pages";
 import "./App.css";
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
             ☰
           </button>
 
-          <div className="vline" />
+          <div className="vline"></div>
 
           <a
             className="title"
@@ -21,14 +20,17 @@ function App() {
             target="_blank"
             rel=""
           >
-            News
+            <img
+              src="https://github.com/BusyDiego/NewsSite/blob/main/my-project/src/components/atoms/logo.png"
+              alt="Logo"
+            />
           </a>
-          <div className="right-side"></div>
-          <div className="vline" />
-        </div>
 
-        <div className="circle">
-          <div className="search-glass" />
+          <div className="rvline"></div>
+
+          <div className="circle">
+            <div className="search-glass" />
+          </div>
         </div>
 
         <div className="divider">
@@ -43,8 +45,6 @@ function App() {
 
         <div className="divider"></div>
       </header>
-
-      <HomePage />
 
       {menuOpen && (
         <div className="menu-overlay">
