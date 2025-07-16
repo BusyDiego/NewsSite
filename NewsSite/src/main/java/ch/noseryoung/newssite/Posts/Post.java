@@ -31,10 +31,14 @@ public class Post {
     private int likes;
     private int dislikes;
 
+    @Column(nullable = false)
+    private String category;
+
     @Column(name = "cover_url")
     private String coverUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 

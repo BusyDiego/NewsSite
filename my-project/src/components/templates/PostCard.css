@@ -1,0 +1,48 @@
+.post-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #d9d9d9;
+  border: #000000 1px solid;
+  width: 150%;
+  height: 35rem;
+}
+
+.post-card img {
+  position: absolute;
+  width: 75%;
+  height: auto;
+  align-items: center;
+}
+
+.post-meta {
+  text-align: center;
+  margin-top: 40%;
+}
+
+.post-infos {
+  position: relative;
+  flex-direction: column;
+  margin-top: 100%;
+  text-align: center;
+  right: 20%;
+}
+
+.post-category {
+  background-color: #d9d9d9;
+  font-size: 1rem;
+  border: #000000 1px solid;
+  width: 30%;
+  left: 1.5rem;
+}
+
+.post-infos big {
+  background-color: #d9d9d9;
+  border: #000000 1px solid;
+  position: relative;
+  display: absolute;
+  flex-direction: column;
+  margin-top: 5px;
+  gap: 5px;
+}

@@ -255,3 +255,23 @@ body {
   top: 0;
   right: 22%;
 }
+
+.main {
+  padding: 50%;
+}
+
+.Posts main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.posts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
