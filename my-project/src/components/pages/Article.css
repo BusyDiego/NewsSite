@@ -1,0 +1,98 @@
+.Article-infos small {
+  text-align: center;
+  position: relative;
+  display: block;
+  flex-direction: column;
+  margin-top: 5px;
+  gap: 5px;
+}
+
+.Article-infos {
+  text-align: center;
+}
+
+.Aticle img {
+  border: #000000 1px solid;
+}
+
+.body {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  padding: 1rem;
+  color: #333;
+}
+
+.PostArticle h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.PostArticle .post-category {
+  font-size: 1rem;
+  color: #000000;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.PostArticle img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  margin-bottom: 24px;
+  border: 1px solid #000;
+}
+
+.PostArticle p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #000000;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.Article-content {
+  border: #000000 1px solid;
+}
+
+.Article-content p {
+  text-align: left;
+  padding-inline: 3%;
+}
+
+.Article-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
+.Back a {
+  font-family: "Jost", sans-serif;
+  font-weight: 400; /* oder 300 für dünner */
+  font-size: 1.5rem;
+  display: inline-block;
+  text-decoration: none;
+  color: #000000;
+}
+.comments {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: start;
+}
+
+.bookmark {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 800px) {
+  .PostArticle {
+    padding: 12px;
+    max-width: 98vw;
+  }
+}

@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -28,14 +30,19 @@ public class Post {
     @NotBlank(message = "Content is required")
     @Column(columnDefinition = "TEXT")
     private String content;
-    private int likes;
-    private int dislikes;
+    private int likes = 0;
+    private int dislikes = 0;
 
     @Column(nullable = false)
     private String category;
 
     @Column(name = "cover_url")
     private String coverUrl;
+    
+    @ElementCollection
+    @CollectionTable(name = "post_images", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "image_url")
+    private List<String> images = new ArrayList<>();
 
 
     @ManyToOne(fetch = FetchType.EAGER)

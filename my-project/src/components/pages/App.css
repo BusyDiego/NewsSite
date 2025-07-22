@@ -8,7 +8,6 @@ a {
 }
 
 body {
-  margin: 0;
   background: #d9d9d9;
   color: rgb(0, 0, 0);
   font-family: sans-serif;
@@ -194,6 +193,10 @@ body {
   z-index: 1000;
 }
 
+ul {
+  padding: 0;
+}
+
 .menu-overlay ul {
   list-style: none;
   padding: 0;
@@ -257,7 +260,8 @@ body {
 }
 
 .main {
-  padding: 50%;
+  display: flex;
+  align-items: start;
 }
 
 .Posts main {
@@ -266,12 +270,6 @@ body {
   align-items: center;
 }
 
-.posts-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 1rem;
-  display: flex;
-  flex-direction: column;
+.Posts {
   align-items: center;
 }

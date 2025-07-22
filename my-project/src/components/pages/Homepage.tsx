@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./App.css";
 import logo from "../../assets/logo.svg";
 import axios from "axios";
 import PostCard from "../templates/PostCard";
 import { baseInstance } from "./Api";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import CreatePost from "./CreatePost";
+import IconButton from "@mui/material/IconButton";
 
 type Post = {
   id: number;
@@ -19,20 +23,71 @@ type Post = {
   updatedAt: string;
 };
 
+interface JwtPayload {
+  sub: string;
+  roles: string[]; // <-- deine Rollen kommen hier rein
+  iat: number;
+  exp: number;
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const token = localStorage.getItem("accessToken");
+
+  const roles: string[] = useMemo(() => {
+    if (!token) return [];
+    try {
+      const decoded = jwtDecode<JwtPayload>(token);
+      return decoded.roles || [];
+    } catch {
+      return [];
+    }
+  }, [token]);
 
   useEffect(() => {
-    // Passe die URL an dein Backend an!
+    setLoading(true);
+    setError(null);
     axios
       .get("http://localhost:8080/api/posts")
       .then((response) => {
-        console.log(response.data); // <-- See what you get here!
+        console.log(response.data);
         setPosts(response.data);
+        setLoading(false);
       })
-      .catch((error) => console.error("Fehler beim Laden der Posts:", error));
+      .catch((error) => {
+        console.error("Fehler beim Laden der Posts:", error);
+        setError(
+          "Fehler beim Laden der Posts. Bitte versuchen Sie es später erneut."
+        );
+        setLoading(false);
+      });
   }, []);
+
+  const canPost = roles.includes("ROLE_ADMIN") || roles.includes("ROLE_WRITER");
+
+  const filteredPosts = useMemo(() => {
+    let filtered = posts;
+
+    if (selectedCategory && selectedCategory !== "All") {
+      filtered = filtered.filter((post) => post.category === selectedCategory);
+    }
+
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (post) =>
+          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.content.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    return filtered;
+  }, [posts, selectedCategory, searchTerm]);
 
   return (
     <div className="App">
@@ -55,36 +110,117 @@ function App() {
 
           <div className="rvline"></div>
 
-          <div className="circle">
+          <div
+            className="circle"
+            onClick={() => {
+              const searchInput = document.getElementById("search-input");
+              if (searchInput) {
+                searchInput.focus();
+              }
+            }}
+          >
             <div className="search-glass" />
           </div>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              position: "absolute",
+              right: "60px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              width: searchTerm ? "200px" : "0px",
+              opacity: searchTerm ? 1 : 0,
+              transition: "all 0.3s ease",
+              padding: "5px 10px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              fontSize: "14px",
+            }}
+          />
         </div>
 
         <div className="divider">
           <ul className="nav-links">
-            <a href="/">Fashion</a>
-            <a href="/">Film</a>
-            <a href="/">All</a>
-            <a href="/">Art</a>
-            <a href="/">Music</a>
+            <a
+              onClick={() => setSelectedCategory("Fashion")}
+              style={{
+                cursor: "pointer",
+                fontWeight: selectedCategory === "Fashion" ? "bold" : "normal",
+              }}
+            >
+              Fashion
+            </a>
+            <a
+              onClick={() => setSelectedCategory("Film")}
+              style={{
+                cursor: "pointer",
+                fontWeight: selectedCategory === "Film" ? "bold" : "normal",
+              }}
+            >
+              Film
+            </a>
+            <a
+              onClick={() => setSelectedCategory("All")}
+              style={{
+                cursor: "pointer",
+                fontWeight:
+                  selectedCategory === "All" || !selectedCategory
+                    ? "bold"
+                    : "normal",
+              }}
+            >
+              All
+            </a>
+            <a
+              onClick={() => setSelectedCategory("Art")}
+              style={{
+                cursor: "pointer",
+                fontWeight: selectedCategory === "Art" ? "bold" : "normal",
+              }}
+            >
+              Art
+            </a>
+            <a
+              onClick={() => setSelectedCategory("Music")}
+              style={{
+                cursor: "pointer",
+                fontWeight: selectedCategory === "Music" ? "bold" : "normal",
+              }}
+            >
+              Music
+            </a>
           </ul>
         </div>
 
         <div className="divider"></div>
       </header>
 
+      {/* Nur für Admin/Writer: "+"-Button */}
+      {canPost && (
+        <Link to="/create-post" className="create-post-btn">
+          <IconButton size="large" color="primary">
+            <button></button>
+          </IconButton>
+        </Link>
+      )}
       <div className="Posts">
-        <main>
-          <ul className="posts-list">
-            {posts.map((post) => (
-              <Link to={`/post/${post.id}`} key={post.id}>
-                <PostCard post={post} />
-              </Link>
-            ))}
-          </ul>
-        </main>
+        {loading && <div className="loading-message">Loading Posts...</div>}
+        {error && <div className="error-message">{error}</div>}
+        {!loading && !error && filteredPosts.length === 0 && (
+          <div className="no-posts-message">No Posts found.</div>
+        )}
+        {!loading &&
+          !error &&
+          filteredPosts.map((post) => (
+            <Link to={`/post/${post.id}`} key={post.id}>
+              <PostCard post={post} />
+            </Link>
+          ))}
       </div>
-
       {menuOpen && (
         <div className="menu-overlay">
           <div className="tabs">
@@ -110,7 +246,7 @@ function App() {
 
           <ul>
             <li>
-              <a href="/">Account</a>
+              <Link to={`/login`}>Account</Link>
             </li>
             <li>
               <a href="/">Settings</a>

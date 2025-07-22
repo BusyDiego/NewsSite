@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import logo from "../../assets/logo.svg";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import PostCard from "../templates/PostCard";
-import { baseInstance } from "./Api";
+import "./Article.css";
+import "./App.css";
+import Article from "./Article";
 
-type Post = {
+type Article = {
   id: number;
   title: string;
   category: string;
@@ -13,24 +14,27 @@ type Post = {
   likes: number;
   dislikes: number;
   coverUrl: string;
+  images?: string[];
   author_id: number;
   createdAt: string;
   updatedAt: string;
 };
 
 function PostArticle() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const { id } = useParams<{ id: string }>();
+  const [Post, setPost] = useState<Article | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/posts/${post.id}")
+      .get(`http://localhost:8080/api/posts/${id}`)
       .then((response) => {
-        console.log(response.data);
-        setPosts(response.data);
+        setPost(response.data);
       })
-      .catch((error) => console.error("Fehler beim Laden der Posts:", error));
-  }, []);
+      .catch((error) => {
+        console.error("Fehler beim Laden des Posts:", error);
+      });
+  }, [id]);
 
   return (
     <>
@@ -39,25 +43,15 @@ function PostArticle() {
           <button className="burger" onClick={() => setMenuOpen(!menuOpen)}>
             ☰
           </button>
-
           <div className="vline"></div>
-
-          <a
-            className="title"
-            href="http://localhost:3000/"
-            target="_blank"
-            rel=""
-          >
+          <a className="title" href="http://localhost:3000/">
             CULNEWS
           </a>
-
           <div className="rvline"></div>
-
           <div className="circle">
             <div className="search-glass" />
           </div>
         </div>
-
         <div className="divider">
           <ul className="nav-links">
             <a href="/">Fashion</a>
@@ -70,13 +64,13 @@ function PostArticle() {
         <div className="divider"></div>
       </header>
 
-      <div className="PostArticle">
-        <ul className="post-list">
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </ul>
-      </div>
+      <main className="PostArticle">
+        {Post ? (
+          <Article post={Post} />
+        ) : (
+          <p style={{ textAlign: "center" }}>Post Loading...</p>
+        )}
+      </main>
 
       {menuOpen && (
         <div className="menu-overlay">
@@ -84,18 +78,9 @@ function PostArticle() {
             <button className="close" onClick={() => setMenuOpen(false)}>
               ✕
             </button>
-
             <div className="vline"></div>
-
-            <a
-              className="title"
-              href="http://localhost:3000/"
-              target="_blank"
-              rel=""
-            ></a>
-
+            <a className="title" href="http://localhost:3000/"></a>
             <div className="rvline"></div>
-
             <div className="circle">
               <div className="search-glass" />
             </div>

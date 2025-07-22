@@ -1,5 +1,6 @@
 import React from "react";
 import "./PostCard.css";
+import axios from "axios";
 
 export type Post = {
   id: number;
@@ -20,7 +21,7 @@ type Props = {
 
 export default function PostCard({ post }: { post: Post }) {
   return (
-    <li className="post-card">
+    <ul className="post-card">
       <img src={post.coverUrl} alt={post.title} className="post-cover" />
 
       <div className="post-infos">
@@ -29,9 +30,13 @@ export default function PostCard({ post }: { post: Post }) {
         </div>
         <big>{post.title}</big>
       </div>
+
       <div className="post-meta">
-        {post.likes} / {post.dislikes}
+        <div className="comments">☲</div>
+        <div className="likes">{post.likes}</div> /{" "}
+        <div className="dislikes">{post.dislikes}</div>
+        <div className="bookmark">☆</div>
       </div>
-    </li>
+    </ul>
   );
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("http://localhost:3000")
@@ -29,8 +30,15 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@Valid @RequestBody Post post) {
-        Post created = postService.createPost(post);
+    public ResponseEntity<Post> createPost(@Valid @RequestBody CreatePostRequest request) {
+        Post post = Post.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .category(request.getCategory())
+                .coverUrl(request.getCoverUrl())
+                .images(request.getImages() != null ? request.getImages() : new ArrayList<>())
+                .build();
+        Post created = postService.createPost(post, request.getAuthorId());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -39,4 +47,17 @@ public class PostController {
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Void> likePost(@PathVariable Long id) {
+        postService.incrementLikes(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/dislike")
+    public ResponseEntity<Void> dislikePost(@PathVariable Long id) {
+        postService.incrementDislikes(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

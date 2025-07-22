@@ -1,29 +1,26 @@
-import axios, { AxiosError } from "axios";
-import type { AxiosInstance, InternalAxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 const BASE_URL = "http://localhost:8080/";
-const tokenKeyname = "accessToken";
+const TOKEN_KEY = "accessToken";
 
 export const baseInstance: AxiosInstance = axios.create({
   baseURL: BASE_URL,
 });
 
-//any instead of unknown
 baseInstance.interceptors.request.use(
-  (config: InternalAxiosRequestConfig<any>) => {
-    const correctPath: boolean = config.url !== "login";
-    if (localStorage.getItem(tokenKeyname) !== "" && correctPath) {
-      if (!config.headers) {
-      }
-      // @ts-ignore
-      config.headers.Authorization = `Bearer ${localStorage.getItem(
-        tokenKeyname
-      )}`;
+  (config: InternalAxiosRequestConfig) => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    const isLoginRequest = config.url?.includes("/login");
+    if (token && !isLoginRequest) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
-
-  (error: AxiosError) => {
-    return Promise.reject(error);
-  }
+  (error: AxiosError) => Promise.reject(error)
 );
