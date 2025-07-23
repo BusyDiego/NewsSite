@@ -1,0 +1,163 @@
+.account-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #d9d9d9;
+  min-height: 100vh;
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #333;
+}
+
+.account-header h1 {
+  margin: 0;
+  font-size: 32px;
+  color: #333;
+}
+
+.back-btn {
+  padding: 10px 20px;
+  background-color: #d9d9d9;
+  border: 1px solid #333;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+  background-color: #c0c0c0;
+}
+
+.account-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 20px;
+  color: #666;
+}
+
+.account-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.account-section {
+  background-color: #d9d9d9;
+  padding: 25px;
+  border: 1px solid #000000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.account-section h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  border-bottom: 1px solid #000000;
+  padding-bottom: 10px;
+}
+
+.info-group {
+  display: flex;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.info-group label {
+  font-weight: bold;
+  width: 120px;
+  color: #666;
+}
+
+.info-group span {
+  color: #333;
+}
+
+.roles-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.role-badge {
+  padding: 8px 16px;
+  background-color: #333;
+  color: 000000;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.no-roles {
+  color: #999;
+  font-style: italic;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #333;
+  transition: all 0.3s;
+}
+
+.edit-profile-btn {
+  background-color: #d9d9d9;
+  color: #333;
+}
+
+.edit-profile-btn:hover {
+  background-color: #c0c0c0;
+}
+
+.change-password-btn {
+  background-color: #666;
+  color: white;
+  border-color: #666;
+}
+
+.change-password-btn:hover {
+  background-color: #555;
+}
+
+.logout-btn {
+  background-color: #333;
+  color: white;
+  border-color: #333;
+}
+
+.logout-btn:hover {
+  background-color: #222;
+}
+
+@media (max-width: 600px) {
+  .account-container {
+    padding: 10px;
+  }
+
+  .account-section {
+    padding: 15px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
+}

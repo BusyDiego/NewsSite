@@ -1,32 +1,121 @@
-button {
-  border-radius: 0px;
+.comment-section {
+  margin-top: 2rem;
+  padding: 20px;
   background-color: #d9d9d9;
   border: 1px solid #000000;
-  font-family: sans-serif;
+}
+
+.comment-section h3 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  border-bottom: 2px solid #000000;
+  padding-bottom: 10px;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.comment-form textarea {
+  padding: 10px;
+  border: 1px solid #000000;
+  background-color: #d9d9d9;
   font-family: "Jost", sans-serif;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.comment-form textarea:focus {
+  outline: none;
+  border-color: #000;
+  background-color: #d9d9d9;
+}
+
+.comment-form button {
+  align-self: flex-start;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #000000;
+  border: 1px solid #000000;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: "Jost", sans-serif;
+  transition: background-color 0.3s;
+}
+
+.comment-form button:hover:not(:disabled) {
+  background-color: #222;
+}
+
+.comment-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #666;
+}
+
+.login-prompt {
+  padding: 20px;
+  background-color: #d9d9d9;
+  border: 1px solid #000000;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-prompt a {
+  color: #333;
+  text-decoration: underline;
+}
+
+.error-message {
+  padding: 10px;
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+  color: #d32f2f;
+  margin-bottom: 15px;
+}
+
+.comments-list {
+  margin-top: 20px;
+}
+
+.no-comments {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 20px;
 }
 
 .comment-item {
-  border: #000000 1px solid;
-  padding-left: 1rem;
-  padding-top: 1%;
-}
-
-.comment-item small {
-  font-size: 0.8rem;
-}
-.comment-item p {
-  text-align: start;
-  margin-left: 1rem;
-}
-
-input {
-  display: block;
-  height: 10%;
-  margin-bottom: 1rem;
-  border-radius: 0px;
   background-color: #d9d9d9;
-  border: #000000 1px solid;
-  width: 100%;
-  height: 70px;
+  border: 1px solid #000000;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-date {
+  color: #666;
+  font-size: 12px;
+}
+
+.comment-content {
+  color: #333;
+  line-height: 1.5;
+  padding-left: 5px;
 }

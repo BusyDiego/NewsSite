@@ -214,10 +214,14 @@ const CreatePost: React.FC = () => {
       {error && <Typography color="error">{error}</Typography>}
 
       <Box sx={{ display: "flex", gap: 1 }}>
-        <button type="submit">Save</button>
-        <button onClick={() => navigate("/")} type="button">
-          Cancel
+        <button type="submit" onClick={() => "/"}>
+          Save
         </button>
+        <a href="/">
+          <button onClick={() => navigate("/")} type="button">
+            Cancel
+          </button>
+        </a>
       </Box>
     </Box>
   );

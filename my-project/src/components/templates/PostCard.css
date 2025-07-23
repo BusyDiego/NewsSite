@@ -22,16 +22,11 @@
   object-fit: cover;
 }
 
-.post-meta {
-  text-align: center;
-  margin-top: 40%;
-}
-
 .post-infos {
   position: relative;
   flex-direction: column;
   margin-top: 100%;
-  padding-left: 0%;
+  padding-left: 0;
   text-align: center;
 }
 
@@ -43,46 +38,72 @@
 }
 
 .post-infos big {
-  padding-left: 2px;
-  padding-right: 2px;
+  padding: 2px;
   background-color: #d9d9d9;
   border: #000000 1px solid;
   position: relative;
-  display: absolute;
-  flex-direction: column;
-  margin-top: 5px;
-  gap: 5px;
+  display: block;
+  margin-top: -1px;
+  margin-bottom: 15%;
+}
+
+/* ⬇️ Hier kommt das aktualisierte Flex-Layout für Meta-Infos ⬇️ */
+.post-meta {
+  display: flex;
+  align-items: center; /* vertikal zentrieren */
+  justify-content: center; /* horizontal zentrieren */
+  gap: 0.5rem; /* Abstand zwischen den Items */
+  margin-top: 1rem; /* Platz nach oben */
+  position: relative;
+  font-size: 1.2rem;
+}
+
+.comments,
+.likes,
+.dislikes,
+.bookmark {
+  position: static; /* nicht mehr absolut */
+}
+
+.comments {
+  color: #000;
 }
 
 .likes {
-  display: contents;
   color: green;
+  margin: 0 0.25rem;
 }
 
 .dislikes {
-  display: contents;
   color: red;
+  margin: 0 0.25rem;
 }
 
+.bookmark {
+  font-size: 1.5rem;
+  color: #000;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.bookmark:hover {
+  transform: scale(1.2);
+}
+
+.bookmark.bookmarked {
+  color: #ffd700;
+}
+
+.bookmark.loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Optional: Datum, falls du es nutzt */
 .date {
-  top: 10px;
-  right: 10px;
   font-size: 0.8rem;
   color: #555;
 }
 
-.comments {
-  position: absolute;
-  bottom: 7%;
-  left: 10%;
-  font-size: 1rem;
-  color: #000000;
-}
-
-.bookmark {
-  position: absolute;
-  bottom: 7%;
-  right: 10%;
-  font-size: 1rem;
-  color: #000000;
-}
+/* bleibt unverändert */

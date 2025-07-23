@@ -6,6 +6,8 @@ import React from "react";
 import Login from "./login";
 import LoginService from "./loginService";
 import CreatePost from "./CreatePost";
+import Account from "./Account";
+import Bookmarks from "./Bookmarks";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
       <Route path="/post/:id" element={<PostArticle />} />
       <Route path="/login" element={<Login />} />
       <Route path="/create-post" element={<CreatePost />} />
+      <Route path="/account" element={<Account />} />
+      <Route path="/bookmarks" element={<Bookmarks />} />
     </Routes>
   );
 }

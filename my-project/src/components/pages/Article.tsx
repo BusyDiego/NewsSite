@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Article.css";
 import CommentSection from "../templates/Comment";
 import ImageCarousel from "../organisms/ImageCarousel";
 import axios from "axios";
+import BookmarkService from "./bookmarkService";
 
 export type Article = {
   id: number;
@@ -23,6 +24,35 @@ type Props = {
 };
 
 export default function PostCard({ post }: { post: Article }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const checkBookmark = async () => {
+      const bookmarked = await BookmarkService().isBookmarked(post.id);
+      setIsBookmarked(bookmarked);
+    };
+    checkBookmark();
+  }, [post.id]);
+
+  const handleBookmarkClick = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Please login to bookmark posts");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await BookmarkService().toggleBookmark(post.id);
+      setIsBookmarked(!isBookmarked);
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleLike = () => {
     axios
       .post(`http://localhost:8080/api/posts/${post.id}/like`)
@@ -40,10 +70,10 @@ export default function PostCard({ post }: { post: Article }) {
       <div className="Back">
         <a href="/">ᐊ</a>
       </div>
-      <ImageCarousel 
-        images={post.images || []} 
-        coverUrl={post.coverUrl} 
-        title={post.title} 
+      <ImageCarousel
+        images={post.images || []}
+        coverUrl={post.coverUrl}
+        title={post.title}
       />
       <div className="Article-infos">
         <div className="Article-category">
@@ -60,7 +90,14 @@ export default function PostCard({ post }: { post: Article }) {
         <div className="dislikes" onClick={handleDislike}>
           {post.dislikes}
         </div>
-        <div className="bookmark">☆</div>
+        <div
+          className={`bookmark ${isBookmarked ? "bookmarked" : ""} ${
+            isLoading ? "loading" : ""
+          }`}
+          onClick={handleBookmarkClick}
+        >
+          {isBookmarked ? "★" : "☆"}
+        </div>
       </div>
       <div className="Article-author">
         <small>Author ID: {post.author_id}</small>

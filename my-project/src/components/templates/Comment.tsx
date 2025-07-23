@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { TextField, Button, Box, Typography, Divider } from "@mui/material";
+import { baseInstance } from "../pages/Api";
 import "./Comment.css";
 
 interface Comment {
@@ -9,7 +9,11 @@ interface Comment {
   createdAt: string;
   author: {
     id: number;
-    username: string;
+    username?: string;
+    email?: string;
+  };
+  post: {
+    id: number;
   };
 }
 
@@ -21,33 +25,70 @@ const Comment: React.FC<Props> = ({ postId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchComments = async () => {
     try {
       const response = await axios.get<Comment[]>(
-        `http://localhost:8080/api/comments`
+        `http://localhost:8080/api/posts/${postId}/comments`
       );
       setComments(response.data);
     } catch (err) {
-      setError("Fehler beim Laden der Kommentare.");
+      console.error("Error fetching comments:", err);
+      // Fallback: try to get all comments and filter
+      try {
+        const allComments = await axios.get<Comment[]>(
+          `http://localhost:8080/api/comments`
+        );
+        const postComments = allComments.data.filter(
+          comment => comment.post?.id === postId
+        );
+        setComments(postComments);
+      } catch (fallbackErr) {
+        setError("Failed to load comments.");
+      }
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!newComment.trim()) {
+      return;
+    }
 
+    const token = localStorage.getItem("accessToken");
+    const userStr = localStorage.getItem("user");
+    
+    if (!token || !userStr) {
+      setError("Please login to comment.");
+      return;
+    }
+
+    const user = JSON.parse(userStr);
+    
     const commentPayload = {
-      content: newComment,
-      author: { id: 1 },
+      content: newComment.trim(),
+      author: { id: user.id },
       post: { id: postId },
     };
 
+    setLoading(true);
+    setError(null);
+
     try {
-      await axios.post("http://localhost:8080/api/comments", commentPayload);
+      await baseInstance.post("/api/comments", commentPayload);
       setNewComment("");
-      fetchComments(); // neu laden
-    } catch (err) {
-      setError("Fehler beim Absenden des Kommentars.");
+      fetchComments();
+    } catch (err: any) {
+      console.error("Error posting comment:", err);
+      if (err.response?.status === 401) {
+        setError("Please login to comment.");
+      } else {
+        setError("Failed to post comment. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,34 +96,59 @@ const Comment: React.FC<Props> = ({ postId }) => {
     fetchComments();
   }, [postId]);
 
+  const token = localStorage.getItem("accessToken");
+
   return (
-    <Box sx={{ mt: 4 }}>
-      <big>Comments</big>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="New comment"
-        />
-        <button>Post</button>
-      </form>
-      {error && (
-        <Typography color="error" sx={{ mt: 2 }}>
-          {error}
-        </Typography>
+    <div className="comment-section">
+      <h3>Comments</h3>
+      
+      {token ? (
+        <form onSubmit={handleSubmit} className="comment-form">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+            rows={3}
+            disabled={loading}
+          />
+          <button type="submit" disabled={loading || !newComment.trim()}>
+            {loading ? "Posting..." : "Post Comment"}
+          </button>
+        </form>
+      ) : (
+        <div className="login-prompt">
+          <p>Please <a href="/login">login</a> to comment.</p>
+        </div>
       )}
+      
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+      
       <div className="comments-list">
-        <div className="divider" />
-        {comments.map((comment) => (
-          <div key={comment.id} className="comment-item">
-            {comment.author?.username || "Anonym"} –{" "}
-            <small>{new Date(comment.createdAt).toLocaleString()}</small>
-            <p>"{comment.content}"</p>
-          </div>
-        ))}
+        {comments.length === 0 ? (
+          <p className="no-comments">No comments yet. Be the first to comment!</p>
+        ) : (
+          comments.map((comment) => (
+            <div key={comment.id} className="comment-item">
+              <div className="comment-header">
+                <span className="comment-author">
+                  {comment.author?.username || comment.author?.email || "Anonymous"}
+                </span>
+                <span className="comment-date">
+                  {new Date(comment.createdAt).toLocaleString()}
+                </span>
+              </div>
+              <div className="comment-content">
+                {comment.content}
+              </div>
+            </div>
+          ))
+        )}
       </div>
-    </Box>
+    </div>
   );
 };
 

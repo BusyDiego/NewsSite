@@ -48,6 +48,28 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.create-post-btn {
+  border: #000000 1px solid;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  background-color: #d9d9d9;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease;
+  color: #000000;
+}
+
+.create-post-btn:hover {
+  transform: scale(1.1);
+}
+
 .cover {
   width: 100%;
   border-radius: 8px;
@@ -209,7 +231,7 @@ ul {
 .menu-overlay a {
   font-size: 1.5rem;
   text-decoration: none;
-  color: #111;
+  color: #000000;
 }
 
 .close {

@@ -37,6 +37,8 @@ function App() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("accessToken");
 
@@ -49,6 +51,14 @@ function App() {
       return [];
     }
   }, [token]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    setMenuOpen(false);
+    navigate("/");
+    window.location.reload();
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -112,35 +122,37 @@ function App() {
 
           <div
             className="circle"
-            onClick={() => {
-              const searchInput = document.getElementById("search-input");
-              if (searchInput) {
-                searchInput.focus();
-              }
-            }}
+            onClick={() => setSearchOpen(!searchOpen)}
+            style={{ cursor: "pointer" }}
           >
             <div className="search-glass" />
           </div>
-          <input
-            id="search-input"
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              position: "absolute",
-              right: "60px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: searchTerm ? "200px" : "0px",
-              opacity: searchTerm ? 1 : 0,
-              transition: "all 0.3s ease",
-              padding: "5px 10px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              fontSize: "14px",
-            }}
-          />
+          {searchOpen && (
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  setSearchOpen(false);
+                }
+              }}
+              style={{
+                position: "absolute",
+                right: "60px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: "200px",
+                padding: "5px 10px",
+                border: "1px solid #000",
+                backgroundColor: "#d9d9d9",
+                fontSize: "14px",
+              }}
+              autoFocus
+            />
+          )}
         </div>
 
         <div className="divider">
@@ -199,14 +211,10 @@ function App() {
         <div className="divider"></div>
       </header>
 
-      {/* Nur für Admin/Writer: "+"-Button */}
-      {canPost && (
-        <Link to="/create-post" className="create-post-btn">
-          <IconButton size="large" color="primary">
-            <button></button>
-          </IconButton>
-        </Link>
-      )}
+      {/* "+"-Button für alle Benutzer */}
+      <Link to="/create-post" className="create-post-btn">
+        <IconButton size="large">+</IconButton>
+      </Link>
       <div className="Posts">
         {loading && <div className="loading-message">Loading Posts...</div>}
         {error && <div className="error-message">{error}</div>}
@@ -246,8 +254,9 @@ function App() {
 
           <ul>
             <li>
-              <Link to={`/login`}>Account</Link>
+              <Link to={token ? `/account` : `/login`}>Account</Link>
             </li>
+
             <li>
               <a href="/">Settings</a>
             </li>
@@ -260,6 +269,13 @@ function App() {
             <li>
               <a href="/">About Us</a>
             </li>
+            {token && (
+              <li>
+                <a href="#" onClick={handleLogout}>
+                  Logout
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       )}
