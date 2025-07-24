@@ -41,7 +41,7 @@ const Comment: React.FC<Props> = ({ postId }) => {
           `http://localhost:8080/api/comments`
         );
         const postComments = allComments.data.filter(
-          comment => comment.post?.id === postId
+          (comment) => comment.post?.id === postId
         );
         setComments(postComments);
       } catch (fallbackErr) {
@@ -52,21 +52,21 @@ const Comment: React.FC<Props> = ({ postId }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newComment.trim()) {
       return;
     }
 
     const token = localStorage.getItem("accessToken");
     const userStr = localStorage.getItem("user");
-    
+
     if (!token || !userStr) {
       setError("Please login to comment.");
       return;
     }
 
     const user = JSON.parse(userStr);
-    
+
     const commentPayload = {
       content: newComment.trim(),
       author: { id: user.id },
@@ -101,7 +101,7 @@ const Comment: React.FC<Props> = ({ postId }) => {
   return (
     <div className="comment-section">
       <h3>Comments</h3>
-      
+
       {token ? (
         <form onSubmit={handleSubmit} className="comment-form">
           <textarea
@@ -117,33 +117,33 @@ const Comment: React.FC<Props> = ({ postId }) => {
         </form>
       ) : (
         <div className="login-prompt">
-          <p>Please <a href="/login">login</a> to comment.</p>
+          <p>
+            Please <a href="/login">login</a> to comment.
+          </p>
         </div>
       )}
-      
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
-      
+
+      {error && <div className="error-message">{error}</div>}
+
       <div className="comments-list">
         {comments.length === 0 ? (
-          <p className="no-comments">No comments yet. Be the first to comment!</p>
+          <p className="no-comments">
+            No comments yet. Be the first to comment!
+          </p>
         ) : (
           comments.map((comment) => (
             <div key={comment.id} className="comment-item">
               <div className="comment-header">
                 <span className="comment-author">
-                  {comment.author?.username || comment.author?.email || "Anonymous"}
+                  {comment.author?.username ||
+                    comment.author?.email ||
+                    "Anonymous"}
                 </span>
                 <span className="comment-date">
                   {new Date(comment.createdAt).toLocaleString()}
                 </span>
               </div>
-              <div className="comment-content">
-                {comment.content}
-              </div>
+              <div className="comment-content">"{comment.content}"</div>
             </div>
           ))
         )}

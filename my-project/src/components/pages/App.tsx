@@ -7,6 +7,7 @@ import Login from "./login";
 import LoginService from "./loginService";
 import CreatePost from "./CreatePost";
 import Account from "./Account";
+import Register from "./Register";
 import Bookmarks from "./Bookmarks";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Route path="/create-post" element={<CreatePost />} />
       <Route path="/account" element={<Account />} />
       <Route path="/bookmarks" element={<Bookmarks />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 }

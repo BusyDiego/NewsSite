@@ -38,6 +38,7 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [commentCount, setCommentCount] = useState<number>(0);
   const navigate = useNavigate();
 
   const token = localStorage.getItem("accessToken");
@@ -98,6 +99,13 @@ function App() {
 
     return filtered;
   }, [posts, selectedCategory, searchTerm]);
+
+  /*useEffect(() => {
+    axios
+      .get<CountResponse>("http://localhost:8080/api/comments/count")
+      .then((res) => setCommentCount(res.data.count))
+      .catch((err) => console.error(err));
+  }, []);*/
 
   return (
     <div className="App">
